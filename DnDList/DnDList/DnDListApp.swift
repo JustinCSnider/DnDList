@@ -11,7 +11,7 @@ import SwiftUI
 struct DnDListApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            CategoryList()
         }
     }
 }
