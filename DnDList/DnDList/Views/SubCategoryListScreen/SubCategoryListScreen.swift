@@ -25,7 +25,11 @@ struct SubCategoryListScreen: View {
             await reloadData()
         }
         .navigationDestination(for: SubCategoryItem.self) { item in
-            ItemDetailScreen(item: item)
+            if category == .Classes {
+                ClassItemDetailScreen(item: item)
+            } else {
+                ItemDetailScreen(item: item)
+            }
         }
     }
     
