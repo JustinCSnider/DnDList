@@ -7,22 +7,25 @@
 
 import SwiftUI
 
-struct SubCategoryList: View {
+struct SubCategoryListScreen: View {
     
-    var category: Category
+    let category: Category
     
     @State var categoryItems: [SubCategoryItem] = []
     
     var body: some View {
         List(categoryItems, id: \.self) {
-            Text($0.name)
+            NavigationLink($0.name, value: $0)
         }
+        .navigationTitle(category.rawValue)
         .refreshable {
             await reloadData()
         }
-        .navigationTitle(category.rawValue)
         .task {
             await reloadData()
+        }
+        .navigationDestination(for: SubCategoryItem.self) { item in
+            ItemDetailScreen(item: item)
         }
     }
     
