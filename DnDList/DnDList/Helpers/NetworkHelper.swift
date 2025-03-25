@@ -19,4 +19,13 @@ struct NetworkHelper {
         }
         return data
     }
+    
+    static func performNetworkRequest<T: Decodable>(for url: URL, as type: T.Type = T.self) async -> T? {
+        let request = URLRequest(url: url)
+        
+        guard let (data, _) = try? await URLSession.shared.data(for: request) else {
+            return nil
+        }
+        return try? JSONDecoder().decode(T.self, from: data)
+    }
 }

@@ -69,20 +69,27 @@ struct ClassItemDetailScreen: View {
     }
     
     var body: some View {
-        VStack(alignment: .leading) {
-            if let classItem {
-                subclassesView()
-                HStack {
-                    Text("Hit die:")
-                        .bold()
-                    Text("\(classItem.hitDie)")
-                    Spacer()
+        ScrollView {
+            VStack(alignment: .leading) {
+                if let classItem {
+                    Card(title: "Hit Die", subView: Text("\(classItem.hitDie)"))
+                        .padding(.horizontal, 16)
+                        .padding(.top, 24)
+                        .frame(height: 64)
+                    subclassesView()
+                        .padding(.top, 24)
+                    HStack {
+                        Text("Hit die:")
+                            .bold()
+                        Text("\(classItem.hitDie)")
+                        Spacer()
+                    }
+                    startingEquipmentOptionsView()
+                } else if self.loading {
+                    Text("Loading...")
+                } else {
+                    Text("No data found...")
                 }
-                startingEquipmentOptionsView()
-            } else if self.loading {
-                Text("Loading...")
-            } else {
-                Text("No data found...")
             }
         }
         .navigationTitle(item.name)
@@ -107,5 +114,35 @@ struct ClassItemDetailScreen: View {
             return
         }
         self.classItem = classItem
+    }
+}
+
+
+struct Card<SubView: View>: View {
+    
+    let title: String
+    @ViewBuilder let subView: SubView
+    
+    init(title: String, subView: SubView) {
+        self.title = title
+        self.subView = subView
+    }
+    
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 24)
+                .fill(.white)
+                .shadow(radius: 4)
+            VStack(alignment: .leading, spacing: 8) {
+                HStack {
+                    Text(title)
+                        .bold()
+                    Spacer()
+                }
+                subView
+            }
+            .frame(maxWidth: .infinity)
+            .padding()
+        }
     }
 }
